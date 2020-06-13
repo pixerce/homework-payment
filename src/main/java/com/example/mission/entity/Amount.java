@@ -1,17 +1,17 @@
 package com.example.mission.entity;
 
-import com.example.mission.payment.model.BaseModelSupport;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class Amount extends BaseModelSupport {
+public class Amount implements Serializable {
 
     @Column(name="amount")
     private long amount;
