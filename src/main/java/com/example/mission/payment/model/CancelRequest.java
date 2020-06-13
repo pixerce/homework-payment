@@ -1,7 +1,6 @@
 package com.example.mission.payment.model;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 public class CancelRequest extends BaseModelSupport {

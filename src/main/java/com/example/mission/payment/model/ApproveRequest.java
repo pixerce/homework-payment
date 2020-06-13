@@ -1,9 +1,6 @@
 package com.example.mission.payment.model;
 
 import lombok.Builder;
-import org.springframework.core.style.ToStringCreator;
-
-import java.io.Serializable;
 
 @Builder
 public class ApproveRequest extends BaseModelSupport {

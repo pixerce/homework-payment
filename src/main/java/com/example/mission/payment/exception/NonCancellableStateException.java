@@ -1,7 +1,5 @@
 package com.example.mission.payment.exception;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
 public class NonCancellableStateException extends RuntimeException {
 
     private ErrorCode code;

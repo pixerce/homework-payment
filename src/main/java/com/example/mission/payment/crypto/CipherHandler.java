@@ -13,9 +13,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Created by jongseok on 14/03/2017.
- */
 @Service
 public class CipherHandler {
 
