@@ -1,8 +1,8 @@
 package com.example.mission.payment.controller;
 
-import com.example.mission.entity.Amount;
-import com.example.mission.entity.Card;
-import com.example.mission.entity.Payment;
+import com.example.mission.payment.repository.entity.Amount;
+import com.example.mission.payment.repository.entity.Card;
+import com.example.mission.payment.repository.entity.Payment;
 import com.example.mission.payment.exception.InvalidStateRequestException;
 import com.example.mission.payment.exception.NonCancellableStateException;
 import com.example.mission.payment.model.*;

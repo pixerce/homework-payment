@@ -1,6 +1,6 @@
 package com.example.mission.payment.message;
 
-import com.example.mission.entity.type.Type;
+import com.example.mission.payment.repository.entity.type.Type;
 import com.example.mission.payment.message.model.DefaultMessage;
 import com.example.mission.payment.message.model.Message;
 import com.example.mission.payment.message.service.MessageWriterService;

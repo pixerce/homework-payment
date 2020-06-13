@@ -1,6 +1,6 @@
 package com.example.mission.payment;
 
-import com.example.mission.entity.Payment;
+import com.example.mission.payment.repository.entity.Payment;
 import com.example.mission.payment.exception.NonCancellableStateException;
 import com.example.mission.payment.model.CancelRequest;
 import com.example.mission.payment.repository.PaymentRepository;

@@ -1,6 +1,6 @@
 package com.example.mission.payment;
 
-import com.example.mission.entity.type.Type;
+import com.example.mission.payment.repository.entity.type.Type;
 import com.example.mission.payment.repository.PaymentRepository;
 import com.example.mission.payment.service.PaymentService;
 import org.junit.jupiter.api.Test;

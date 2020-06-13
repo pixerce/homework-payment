@@ -1,6 +1,6 @@
 package com.example.mission.payment.repository;
 
-import com.example.mission.entity.PaymentCardDetail;
+import com.example.mission.payment.repository.entity.PaymentCardDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

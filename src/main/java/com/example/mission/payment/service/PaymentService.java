@@ -2,12 +2,12 @@ package com.example.mission.payment.service;
 
 import com.example.mission.card.company.CardCompanyResponse;
 import com.example.mission.card.company.Client;
-import com.example.mission.entity.Amount;
-import com.example.mission.entity.Card;
-import com.example.mission.entity.Payment;
-import com.example.mission.entity.PaymentCardDetail;
-import com.example.mission.entity.type.Status;
-import com.example.mission.entity.type.Type;
+import com.example.mission.payment.repository.entity.Amount;
+import com.example.mission.payment.repository.entity.Card;
+import com.example.mission.payment.repository.entity.Payment;
+import com.example.mission.payment.repository.entity.PaymentCardDetail;
+import com.example.mission.payment.repository.entity.type.Status;
+import com.example.mission.payment.repository.entity.type.Type;
 import com.example.mission.payment.exception.ErrorCode;
 import com.example.mission.payment.exception.NonCancellableStateException;
 import com.example.mission.payment.message.model.DefaultMessage;

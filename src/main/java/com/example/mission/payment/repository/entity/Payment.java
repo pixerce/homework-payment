@@ -1,7 +1,7 @@
-package com.example.mission.entity;
+package com.example.mission.payment.repository.entity;
 
-import com.example.mission.entity.type.Status;
-import com.example.mission.entity.type.Type;
+import com.example.mission.payment.repository.entity.type.Status;
+import com.example.mission.payment.repository.entity.type.Type;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

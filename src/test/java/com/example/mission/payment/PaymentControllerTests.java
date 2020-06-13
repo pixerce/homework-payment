@@ -1,7 +1,7 @@
 package com.example.mission.payment;
 
-import com.example.mission.entity.*;
-import com.example.mission.entity.type.Status;
+import com.example.mission.payment.repository.entity.*;
+import com.example.mission.payment.repository.entity.type.Status;
 import com.example.mission.payment.controller.PaymentController;
 import com.example.mission.payment.exception.ErrorCode;
 import com.example.mission.payment.exception.NonCancellableStateException;

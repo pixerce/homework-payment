@@ -1,11 +1,11 @@
 package com.example.mission.payment;
 
 import com.example.mission.card.company.CardComponeyRepository;
-import com.example.mission.entity.Card;
-import com.example.mission.entity.Payment;
-import com.example.mission.entity.PaymentCardDetail;
-import com.example.mission.entity.type.Status;
-import com.example.mission.entity.type.Type;
+import com.example.mission.payment.repository.entity.Card;
+import com.example.mission.payment.repository.entity.Payment;
+import com.example.mission.payment.repository.entity.PaymentCardDetail;
+import com.example.mission.payment.repository.entity.type.Status;
+import com.example.mission.payment.repository.entity.type.Type;
 import com.example.mission.payment.exception.NonCancellableStateException;
 import com.example.mission.payment.repository.CardRepository;
 import com.example.mission.payment.repository.PaymentCardDetailRepository;

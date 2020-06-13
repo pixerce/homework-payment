@@ -1,4 +1,4 @@
-package com.example.mission.entity;
+package com.example.mission.payment.repository.entity;
 
 import com.google.common.hash.Hashing;
 import lombok.*;

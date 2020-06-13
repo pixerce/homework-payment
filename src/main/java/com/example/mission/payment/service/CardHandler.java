@@ -1,6 +1,6 @@
 package com.example.mission.payment.service;
 
-import com.example.mission.entity.Card;
+import com.example.mission.payment.repository.entity.Card;
 import com.example.mission.payment.crypto.CipherHandler;
 import com.example.mission.payment.repository.CardRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.example.mission.entity.Card.hash;
+import static com.example.mission.payment.repository.entity.Card.hash;
 
 @Service
 public class CardHandler {

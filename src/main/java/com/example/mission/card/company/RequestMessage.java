@@ -1,6 +1,6 @@
 package com.example.mission.card.company;
 
-import com.example.mission.entity.BaseEntity;
+import com.example.mission.payment.repository.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
