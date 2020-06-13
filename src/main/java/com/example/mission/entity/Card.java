@@ -1,9 +1,7 @@
 package com.example.mission.entity;
 
 import com.google.common.hash.Hashing;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -11,12 +9,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.nio.charset.StandardCharsets;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
+@Setter
+@Getter
 @Table(name = "card")
 public class Card extends BaseEntity {
 
@@ -27,6 +28,13 @@ public class Card extends BaseEntity {
 
     @Column(name = "info")
     private String info;
+
+    @Transient
+    private String cardNumber;
+    @Transient
+    private String validDate;
+    @Transient
+    private String cvc;
 
     public String getHashKey() {
         return hashKey;

@@ -2,34 +2,32 @@ package com.example.mission.payment.service;
 
 import com.example.mission.card.company.CardCompanyResponse;
 import com.example.mission.card.company.Client;
-import com.example.mission.entity.*;
+import com.example.mission.entity.Amount;
+import com.example.mission.entity.Card;
+import com.example.mission.entity.Payment;
+import com.example.mission.entity.PaymentCardDetail;
 import com.example.mission.entity.type.Status;
 import com.example.mission.entity.type.Type;
-import com.example.mission.payment.crypto.CipherHandler;
 import com.example.mission.payment.exception.ErrorCode;
 import com.example.mission.payment.exception.NonCancellableStateException;
 import com.example.mission.payment.message.model.DefaultMessage;
-import com.example.mission.payment.model.CardInfo;
 import com.example.mission.payment.model.DetailResponse;
-import com.example.mission.payment.repository.CardRepository;
 import com.example.mission.payment.repository.PaymentCardDetailRepository;
 import com.example.mission.payment.repository.PaymentRepository;
 import com.example.mission.payment.sync.DisallowConcurrentRequest;
 import com.example.mission.payment.sync.HashingTarget;
 import com.example.mission.payment.utils.TidGenerator;
-import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.example.mission.entity.Card.hash;
 
 @Slf4j
 @Service
@@ -37,36 +35,25 @@ public class PaymentService {
 
     private PaymentRepository paymentRepository;
 
-    private CardRepository cardRepository;
-
     private Client client;
-
-    private CipherHandler cipher;
 
     private PaymentCardDetailRepository detailRepository;
 
     private final static String CANCEL_INSTALLMENT = "00";
 
-    public PaymentService(PaymentRepository paymentRepository, CardRepository cardRepository, PaymentCardDetailRepository detailRepository, Client client, CipherHandler cipher) {
+    private CardHandler cardHandler;
+
+    public PaymentService(PaymentRepository paymentRepository, CardHandler cardHandler, PaymentCardDetailRepository detailRepository, Client client) {
         this.paymentRepository = paymentRepository;
         this.client = client;
-        this.cipher = cipher;
-        this.cardRepository = cardRepository;
+        this.cardHandler = cardHandler;
         this.detailRepository = detailRepository;
-    }
-
-    final private Card getCard(String cardNumber, String validDate, String cvc) {
-        final String cardInfo = Arrays.asList(cardNumber, validDate, cvc).stream().collect(Collectors.joining("|"));
-        final String hashKey = hash(cardInfo);
-
-        final String encryptedCardInfo = this.cipher.encrypt(cardInfo);
-        return Card.builder().hashKey(hashKey).info(encryptedCardInfo).build();
     }
 
     @DisallowConcurrentRequest
     public Payment approve(@HashingTarget final String cardNumber, String validDate, final String cvc, String installment, @HashingTarget long payAmount, Long vat) {
 
-        final Card card = this.getCard(cardNumber, validDate, cvc);
+        final Card card = this.cardHandler.make(cardNumber, validDate, cvc);
         final Amount amount = Amount.of(payAmount, vat);
         Payment payment = Payment.payWith(TidGenerator.generate(), amount, Status.WT, card);
 
@@ -134,7 +121,7 @@ public class PaymentService {
         }
 
         final Payment pay = paymentHistory.stream().filter(p -> Type.PAYMENT == p.getType()).findAny().get();
-        final CardInfo card = CardInfo.with(cipher.decrypt(pay.getCard().getInfo()));
+        final Card card = this.cardHandler.decrypt(pay.getCard());
 
         DefaultMessage message = DefaultMessage.builder()
                 .amount(amount.getAmount())
@@ -172,8 +159,7 @@ public class PaymentService {
         Long canceledVat = ObjectUtils.isEmpty(cancelList) ? null : cancelList.stream().map(Payment::getAmount).mapToLong(Amount::getVat).sum();
         LocalDateTime latestCanceledAt = ObjectUtils.isEmpty(cancelList) ? null : cancelList.get(0).getUpdatedAt();
 
-        String decrypted = cipher.decrypt(pay.getCard().getInfo());
-        String [] info = StringUtils.split(decrypted, "|");
+        final Card card = this.cardHandler.decrypt(pay.getCard());
 
         DetailResponse.Status status = pay.getStatus() == Status.DN ? DetailResponse.Status.PAY_SUCCESS: DetailResponse.Status.PAY_FAILURE;
         if (!ObjectUtils.isEmpty(cancelList)) {
@@ -188,9 +174,9 @@ public class PaymentService {
                 .canceledAmount(canceledAmount)
                 .canceledVat(canceledVat)
                 .latestCanceledAt(latestCanceledAt)
-                .cardNumber(Card.masking(info[0]))
-                .validDate(info[1])
-                .cvc(info[2])
+                .cardNumber(Card.masking(card.getCardNumber()))
+                .validDate(card.getValidDate())
+                .cvc(card.getCvc())
                 .build();
     }
 
