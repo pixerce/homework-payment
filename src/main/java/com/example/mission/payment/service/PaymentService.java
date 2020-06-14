@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.ToLongFunction;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -96,13 +98,12 @@ public class PaymentService {
     public Payment cancel(@HashingTarget final String tid, @HashingTarget long cancelAmount, Long vat) {
 
         List<Payment> paymentHistory = this.paymentRepository.findByTid(tid);
-        long remain = Optional.ofNullable(paymentHistory).orElse(new ArrayList<>()).stream()
-                .mapToLong(t -> Type.PAYMENT == t.getType() ? t.getAmount().getAmount() : -t.getAmount().getAmount())
-                .sum();
 
-        long remainVat = Optional.ofNullable(paymentHistory).orElse(new ArrayList<>()).stream()
-                .mapToLong(t -> Type.PAYMENT == t.getType() ? t.getAmount().getVat() : -t.getAmount().getVat())
-                .sum();
+        ToLongFunction<Payment> cancellableAmount = payment -> Type.PAYMENT == payment.getType() ? payment.getAmount().getAmount() : -payment.getAmount().getAmount();
+        ToLongFunction<Payment> cancellableVat = payment -> Type.PAYMENT == payment.getType() ? payment.getAmount().getVat() : -payment.getAmount().getVat();
+
+        long remain = Optional.ofNullable(paymentHistory).orElse(new ArrayList<>()).stream().mapToLong(cancellableAmount).sum();
+        long remainVat = Optional.ofNullable(paymentHistory).orElse(new ArrayList<>()).stream().mapToLong(cancellableVat).sum();
 
         final Amount amount = Amount.of(cancelAmount, Optional.ofNullable(vat).orElse(remain == cancelAmount ? remainVat : null));
         Payment cancellation = Payment.cancelWith(tid, amount, Status.WT, Card.NONE);
